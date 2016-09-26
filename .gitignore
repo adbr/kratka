@@ -1,0 +1,7 @@
+auto
+*.aux
+*.log
+*.out
+/xpdf.core
+*~
+*.pdf
