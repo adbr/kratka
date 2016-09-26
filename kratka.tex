@@ -1,45 +1,35 @@
 % Strona w kratkę
 % 2016-09-23 adbr
-%
-% todo
-% - margines 1cm
-% - numer strony niżej
-% - zwiększyć rozmiar kratki
 
-\documentclass[a4paper,11pt]{article}
+\documentclass[a4paper,11pt]{memoir}
 
 \usepackage[MeX]{polski}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
-\usepackage[margin=1cm,foot=10pt]{geometry}
+%\usepackage[margin=1cm, noheadfoot, nomarginpar, showframe]{geometry}
+\usepackage[margin=1cm]{geometry}
 \usepackage{tikz}
 
-\def\pagefirst{1}
-\def\pagelast{3}
+\def\boxsize{4.25mm}
 
+\setlength{\topskip}{0mm}
+\setlength{\parindent}{0mm}
 
 \begin{document}
 
-\setcounter{page}{\pagefirst}
+\pagestyle{empty}
 
-\foreach \n in {\pagefirst, ..., \pagelast} {
-  
-  \begin{centering}
+\begin{vplace} % centrowanie w pionie
+
+  \begin{centering} % centrowanie w poziomie
     
-    \begin{tikzpicture}[x=4.25mm, y=4.25mm]
-
-      \draw[step=4.25mm, very thin, gray] (0,0) grid (43,64);
-      
-      % \draw[step=4mm, line width=0.1mm, densely dotted] (0,0) grid (15,24);
-      % \draw[step=4mm, line width=0.1mm, dash pattern={on 0.5pt off 0.5pt}] (0,0) grid (15,24);
-      
+    \begin{tikzpicture}[x=\boxsize, y=\boxsize]
+      \draw[step=\boxsize, very thin, gray] (0,0) grid (43,64);
     \end{tikzpicture}
     
   \end{centering}
 
-  \newpage
-
-}
+\end{vplace}
 
 \end{document}
