@@ -10,26 +10,27 @@
 %\usepackage[margin=1cm, noheadfoot, nomarginpar, showframe]{geometry}
 \usepackage[margin=1cm]{geometry}
 \usepackage{tikz}
-
-\def\boxsize{4.25mm}
+\usepackage{layout}
 
 \setlength{\topskip}{0mm}
 \setlength{\parindent}{0mm}
 
+% rozmiar kratki
+\def\boxsize{4.25mm}
+
 \begin{document}
 
+%\layout
 \pagestyle{empty}
 
-\begin{vplace} % centrowanie w pionie
-
-  \begin{centering} % centrowanie w poziomie
+\begin{vplace}
+  \begin{centering}
     
     \begin{tikzpicture}[x=\boxsize, y=\boxsize]
       \draw[step=\boxsize, very thin, gray] (0,0) grid (43,64);
     \end{tikzpicture}
     
   \end{centering}
-
 \end{vplace}
 
 \end{document}
