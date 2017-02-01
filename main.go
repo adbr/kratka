@@ -62,7 +62,7 @@ func main() {
 	flag.Parse()
 
 	if *help {
-		fmt.Fprint(os.Stdout, helpStr)
+		fmt.Print(helpStr)
 		os.Exit(0)
 	}
 
@@ -100,7 +100,7 @@ func main() {
 		log.Fatalf("copy pdf file: %s", err)
 	}
 
-	// Usunięcie katalogi roboczego
+	// Usunięcie katalogu roboczego
 	if *work {
 		log.Printf("work directory: %s\n", workdir)
 	} else {
