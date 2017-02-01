@@ -1,0 +1,56 @@
+* kratka
+
+Program kratka tworzy plik pdf zawierający jedną stronę w kratkę.
+
+Plik pdf jest tworzony przy użyciu programu pdflatex z systemu LaTeX.
+Domyślnie jest tworzona strona z kratką 43x64 pola o rozmiarze 4.25mm.
+
+** Motywacja
+
+Program jest ćwiczeniem z używania pakietów języka Go:
+- flag (obsługa opcji wiersza poleceń)
+- ioutil.TempDir (tworzenie katalogu i plików tymczasowych)
+- text/template (generowanie pliku na podstawie template'u)
+- os/exec (wywoływanie programu command line)
+
+** Sposób użycia
+
+: Sposób użycia: kratka [opcje] plik.pdf
+: Opcje:
+: 	-work
+: 		drukuje nazwę tymczasowego katalogu roboczego i nie
+: 		usuwa go na końcu.
+: 	-h
+: 		drukuje help
+: 	-margin length
+: 		margines dookoła rysunku (domyślnie "1cm")
+: 	-hoffset length
+: 		przesunięcie rysunku w poziomie (domyślnie "0cm")
+: 	-voffset length
+: 		przesunięcie rysunku w pionie (domyślnie "0cm")
+: 	-showframe
+: 		czy rysować linie odniesienia (domyślnie false)
+: 	-boxsizex length
+: 		rozmiar kratki w poziomie (domyślnie "4.25mm")
+: 	-boxsizey length
+: 		rozmiar kratki w pionie (domyślnie "4.25mm")
+: 	-step length
+: 		(domyślnie "4.25mm")
+: 	-linewidth width
+: 		grubość linii (domyślnie "very thin")
+: 	-linecolor color
+: 		kolor linii (domyślnie "gray")
+: 	-linestyle style
+: 		rodzaj linii (domyślnie "solid")
+: 	-gridsizex int
+: 		liczba kratek w poziomie (domyślnie 43)
+: 	-gridsizey int
+: 		liczba kratek w pionie (domyślnie 64)
+
+** Zależności
+
+Program kratka używa systemu LaTeX. W ścieżce musi być dostępny
+program pdflatex. W LaTeXu muszą być dostępne pakiety:
+- memoir
+- geometry
+- tikz

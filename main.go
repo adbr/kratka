@@ -1,5 +1,8 @@
 // 2016-12-02 adbr
 
+// Program kratka tworzy plik pdf zawierający jedną stronę w kratkę.
+// Opis programu znajduje się w 'const helpStr' lub może być
+// wyświetlony przy użyciu opcji -h.
 package main
 
 import (
@@ -16,75 +19,6 @@ import (
 
 // Prefiks nazwy plików roboczych
 const basename = "kratka"
-
-// latex zawiera template dokumentu w latexu. Ogranicznikami dla
-// template actions są @@ i @@ (zamiast domyślnych {{ i }}).
-const latex = `
-\documentclass[a4paper,11pt]{memoir}
-
-\usepackage[MeX]{polski}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage[margin=@@.Margin@@,
-  hoffset=@@.Hoffset@@,
-  voffset=@@.Voffset@@,
-  showframe=@@.Showframe@@]{geometry}
-\usepackage{tikz}
-\usepackage{layout}
-
-\setlength{\topskip}{0mm}
-\setlength{\parindent}{0mm}
-
-\begin{document}
-
-%\layout
-\pagestyle{empty}
-
-\begin{vplace}
-  \begin{centering}
-    
-    \begin{tikzpicture}[x=@@.BoxSizeX@@, y=@@.BoxSizeY@@]
-      \draw[step=@@.Step@@, @@.LineWidth@@, @@.LineColor@@, @@.LineStyle@@]
-        (0,0) grid (@@.GridSizeX@@, @@.GridSizeY@@);
-    \end{tikzpicture}
-    
-  \end{centering}
-\end{vplace}
-
-\end{document}
-`
-
-const usageStr = `usage: kratka [opcje] plik.pdf
-Opcje:
-	-work
-		drukuje nazwę tymczasowego katalogu roboczego i nie
-		usuwa go na końcu.
-	-margin length
-		margines dookoła rysunku (domyślnie "1cm")
-	-hoffset length
-		przesunięcie rysunku w poziomie (domyślnie "0cm")
-	-voffset length
-		przesunięcie rysunku w pionie (domyślnie "0cm")
-	-showframe
-		czy rysować linie odniesienia (domyślnie false)
-	-boxsizex length
-		rozmiar kratki w poziomie (domyślnie "4.25mm")
-	-boxsizey length
-		rozmiar kratki w pionie (domyślnie "4.25mm")
-	-step length
-		(domyślnie "4.25mm")
-	-linewidth width
-		grubość linii (domyślnie "very thin")
-	-linecolor color
-		kolor linii (domyślnie "gray")
-	-linestyle style
-		rodzaj linii (domyślnie "solid")
-	-gridsizex int
-		liczba kratek w poziomie (domyślnie 43)
-	-gridsizey int
-		liczba kratek w pionie (domyślnie 64)
-`
 
 // Parametry dokumentu w latexu używane w template
 type Parameters struct {
@@ -105,6 +39,7 @@ type Parameters struct {
 // Flagi command line
 var (
 	work      = flag.Bool("work", false, "")
+	help      = flag.Bool("h", false, "")
 	margin    = flag.String("margin", "1cm", "")
 	hoffset   = flag.String("hoffset", "0cm", "")
 	voffset   = flag.String("voffset", "0cm", "")
@@ -126,8 +61,14 @@ func main() {
 	flag.Usage = usage
 	flag.Parse()
 
+	if *help {
+		fmt.Fprint(os.Stdout, helpStr)
+		os.Exit(0)
+	}
+
 	// Sprawdzenie czy podano nazwę pliku wynikowego
 	if flag.NArg() < 1 {
+		log.Print("brakuje argumentu z nazwą pliku pdf")
 		usage()
 		os.Exit(2)
 	}
@@ -182,7 +123,7 @@ func createLatexFile(workdir string) (fname string) {
 	defer file.Close()
 
 	tmpl := template.New("latex").Delims("@@", "@@")
-	tmpl, err = tmpl.Parse(latex)
+	tmpl, err = tmpl.Parse(latexTemplate)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -255,3 +196,163 @@ func copyFile(dst, src string) (err error) {
 func usage() {
 	fmt.Fprint(os.Stderr, usageStr)
 }
+
+// latexTemplate zawiera template dokumentu w latexu. Ogranicznikami
+// dla template actions są @@ i @@ (zamiast domyślnych {{ i }}).
+const latexTemplate = `
+\documentclass[a4paper,11pt]{memoir}
+
+\usepackage[MeX]{polski}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=@@.Margin@@,
+  hoffset=@@.Hoffset@@,
+  voffset=@@.Voffset@@,
+  showframe=@@.Showframe@@]{geometry}
+\usepackage{tikz}
+\usepackage{layout}
+
+\setlength{\topskip}{0mm}
+\setlength{\parindent}{0mm}
+
+\begin{document}
+
+%\layout
+\pagestyle{empty}
+
+\begin{vplace}
+  \begin{centering}
+
+    \begin{tikzpicture}[x=@@.BoxSizeX@@, y=@@.BoxSizeY@@]
+      \draw[step=@@.Step@@, @@.LineWidth@@, @@.LineColor@@, @@.LineStyle@@]
+        (0,0) grid (@@.GridSizeX@@, @@.GridSizeY@@);
+    \end{tikzpicture}
+
+  \end{centering}
+\end{vplace}
+
+\end{document}
+`
+
+const usageStr = `Sposób użycia: kratka [opcje] plik.pdf
+Opcje:
+	-work
+		drukuje nazwę tymczasowego katalogu roboczego i nie
+		usuwa go na końcu.
+	-h
+		drukuje help
+	-margin length
+		margines dookoła rysunku (domyślnie "1cm")
+	-hoffset length
+		przesunięcie rysunku w poziomie (domyślnie "0cm")
+	-voffset length
+		przesunięcie rysunku w pionie (domyślnie "0cm")
+	-showframe
+		czy rysować linie odniesienia (domyślnie false)
+	-boxsizex length
+		rozmiar kratki w poziomie (domyślnie "4.25mm")
+	-boxsizey length
+		rozmiar kratki w pionie (domyślnie "4.25mm")
+	-step length
+		(domyślnie "4.25mm")
+	-linewidth width
+		grubość linii (domyślnie "very thin")
+	-linecolor color
+		kolor linii (domyślnie "gray")
+	-linestyle style
+		rodzaj linii (domyślnie "solid")
+	-gridsizex int
+		liczba kratek w poziomie (domyślnie 43)
+	-gridsizey int
+		liczba kratek w pionie (domyślnie 64)
+`
+
+const helpStr = `Program kratka tworzy plik pdf zawierający jedną stronę w kratkę.
+
+Plik pdf jest tworzony przy użyciu programu pdflatex z systemu LaTeX.
+Domyślnie jest tworzona strona z kratką 43x64 pola o rozmiarze 4.25mm.
+
+Sposób użycia: kratka [opcje] plik.pdf
+Opcje:
+	-work
+		drukuje nazwę tymczasowego katalogu roboczego i nie
+		usuwa go na końcu.
+	-h
+		drukuje help
+	-margin length
+		margines dookoła rysunku (domyślnie "1cm")
+	-hoffset length
+		przesunięcie rysunku w poziomie (domyślnie "0cm")
+	-voffset length
+		przesunięcie rysunku w pionie (domyślnie "0cm")
+	-showframe
+		czy rysować linie odniesienia (domyślnie false)
+	-boxsizex length
+		rozmiar kratki w poziomie (domyślnie "4.25mm")
+	-boxsizey length
+		rozmiar kratki w pionie (domyślnie "4.25mm")
+	-step length
+		(domyślnie "4.25mm")
+	-linewidth width
+		grubość linii (domyślnie "very thin")
+	-linecolor color
+		kolor linii (domyślnie "gray")
+	-linestyle style
+		rodzaj linii (domyślnie "solid")
+	-gridsizex int
+		liczba kratek w poziomie (domyślnie 43)
+	-gridsizey int
+		liczba kratek w pionie (domyślnie 64)
+
+Argument length w opcjach ma format taki jak length w LaTeXu.
+Przykłady wartości argumentu length:
+
+	1cm, -2.34cm, 3.0mm, 4pt, 5in, 6ex, 7em
+
+Argument width opcji -linewidth może mieć wartość taką jak grubości
+linii w latexowym pakiecie TikZ. Przykłady wartości argumentu width:
+
+	line width=5pt
+	ultra thin
+	very thin
+	thin
+	semithick
+	thick
+	very thick
+	ultra thick
+
+Argument color opcji -linecolor może mieć wartość taką jak kolor
+linii w latexowym pakiecie TikZ. Przykłady wartości argumentu color:
+
+	gray, blue, red
+
+Argument style opcji -linestyle może mieć wartość taką jak rodzaj
+linii w latexowym pakiecie TikZ. Przykłady wartości argumentu style:
+
+	solid
+	dotted
+	densely dotted
+	dashed
+	densely dashed
+	dash dot
+	dash dot dot
+
+Przykłady:
+
+Kratka o domyślnych parametrach ale rysowana liniami kropkowanymi:
+
+	kratka -linestyle dotted x.pdf
+
+Kratka o domyślnych parametrach przesunięta o 2 mm w lewo:
+
+	kratka -hoffset -2mm x.pdf
+
+Zależności:
+
+Do działania programu musi być zainstalowany system LaTeX z pakietami:
+- memoir
+- geometry
+- tikz
+W ścieżce musi być dostępny program pdflatex.
+`
