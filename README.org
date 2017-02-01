@@ -54,3 +54,13 @@ program pdflatex. W LaTeXu muszą być dostępne pakiety:
 - memoir
 - geometry
 - tikz
+
+** Instalacja
+
+: $ go get github.com/adbr/kratka
+
+lub:
+
+: $ git clone https://github.com/adbr/kratka
+: $ cd kratka/
+: $ go build
