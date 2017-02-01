@@ -89,7 +89,8 @@ func main() {
 	if err != nil {
 		logfile := filepath.Join(workdir, basename+".log")
 		log.Print("pdflatex error")
-		log.Fatalf("pdflatex log file: %s", logfile)
+		log.Printf("pdflatex log file: %s", logfile)
+		log.Fatal(err)
 	}
 
 	// Skopiowanie wynikowego pliku pdf
