@@ -40,6 +40,7 @@ type Parameters struct {
 var (
 	work      = flag.Bool("work", false, "")
 	help      = flag.Bool("h", false, "")
+	tmpl      = flag.Bool("template", false, "")
 	margin    = flag.String("margin", "1cm", "")
 	hoffset   = flag.String("hoffset", "0cm", "")
 	voffset   = flag.String("voffset", "0cm", "")
@@ -63,6 +64,11 @@ func main() {
 
 	if *help {
 		fmt.Print(helpStr)
+		os.Exit(0)
+	}
+
+	if *tmpl {
+		fmt.Print(latexTemplate)
 		os.Exit(0)
 	}
 
@@ -243,6 +249,8 @@ Opcje:
 		usuwa go na końcu.
 	-h
 		drukuje help
+	-template
+		drukuje template dokumentu w latexu
 	-margin length
 		margines dookoła rysunku (domyślnie "1cm")
 	-hoffset length
@@ -281,6 +289,8 @@ Opcje:
 		usuwa go na końcu.
 	-h
 		drukuje help
+	-template
+		drukuje template dokumentu w latexu
 	-margin length
 		margines dookoła rysunku (domyślnie "1cm")
 	-hoffset length

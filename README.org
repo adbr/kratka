@@ -7,7 +7,7 @@ Domyślnie jest tworzona strona z kratką 43x64 pola o rozmiarze 4.25mm.
 
 ** Motywacja
 
-Program jest ćwiczeniem z używania pakietów języka Go:
+Ćwiczenie z używania pakietów języka Go:
 - flag (obsługa opcji wiersza poleceń)
 - ioutil.TempDir (tworzenie katalogu i plików tymczasowych)
 - text/template (generowanie pliku na podstawie template'u)
