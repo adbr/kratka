@@ -22,6 +22,8 @@ Domyślnie jest tworzona strona z kratką 43x64 pola o rozmiarze 4.25mm.
 : 		usuwa go na końcu.
 : 	-h
 : 		drukuje help
+: 	-template
+: 		drukuje template dokumentu w latexu
 : 	-margin length
 : 		margines dookoła rysunku (domyślnie "1cm")
 : 	-hoffset length
